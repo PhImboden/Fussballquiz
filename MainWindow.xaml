@@ -21,7 +21,7 @@
                    HorizontalAlignment="Center"
                    Margin="0,40,0,0"
          />
-        <Button Content="Login&#xD;&#xA;" HorizontalAlignment="Left" Margin="487,295,0,0" VerticalAlignment="Top" Width="67" RenderTransformOrigin="0.5,0.5" Height="25" Click="Button_Click_1">
+        <Button Content="Anmelden&#xD;&#xA;" HorizontalAlignment="Left" Margin="487,295,0,0" VerticalAlignment="Top" Width="67" RenderTransformOrigin="0.5,0.5" Height="25" Click="Button_Click_1">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
