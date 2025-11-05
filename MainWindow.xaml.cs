@@ -23,7 +23,16 @@ namespace Fussballquiz
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            if(!string.IsNullOrWhiteSpace(UsernameTextBox.Text))
+            {
+                Username = UsernameTextbox.Text;
+                this.DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Bitte einen Benutzernamen eingeben.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
