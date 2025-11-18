@@ -2,213 +2,103 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualBasic; // Für InputBox
 
 namespace Fussballquiz
 {
     public partial class MainWindow : Window
     {
+        // ---------------------------------------------------------
+        // FELDER
+        // ---------------------------------------------------------
         private string currentUser = "";
+        private List<(string Frage, string Antwort)> questions = new(); // Zeile 19: Feld initialisiert
+        private int index = 0;
+        private int points = 0;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        // LOGIN BUTTON
+        // ---------------------------------------------------------
+        // LOGIN BUTTON (Jetzt ohne eigenes Fenster)
+        // ---------------------------------------------------------
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow login = new LoginWindow();
-            login.Owner = this;
-            bool? result = login.ShowDialog();
+            // InputBox statt Popup-Fenster
+            string username = Interaction.InputBox(
+                "Bitte Benutzernamen eingeben:",
+                "Login",
+                "");
 
-            if (result == true)
+            if (string.IsNullOrWhiteSpace(username))
             {
-                currentUser = login.Username;
-                MessageBox.Show($"Willkommen, {currentUser}!",
-                    "Login erfolgreich", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                QuizSelectionWindow selector = new QuizSelectionWindow(currentUser);
-                selector.Show();
+                MessageBox.Show("Kein Benutzername eingegeben!", "Fehler",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
+
+            currentUser = username.Trim();
+
+            MessageBox.Show($"Willkommen, {currentUser}!",
+                "Login erfolgreich", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // StartScreen → Quiz-Auswahl
+            StartScreen.Visibility = Visibility.Collapsed;
+            QuizSelection.Visibility = Visibility.Visible;
+
+            QuizSelectionTitle.Text = $"Wähle dein Quiz, {currentUser}";
         }
 
+        // ---------------------------------------------------------
         // OHNE LOGIN STARTEN
+        // ---------------------------------------------------------
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            QuizSelectionWindow selector = new QuizSelectionWindow(currentUser);
-            selector.Show();
+            StartScreen.Visibility = Visibility.Collapsed;
+            QuizSelection.Visibility = Visibility.Visible;
         }
-    }
 
-    // -------------------------------------------------------------------
-    // LOGIN WINDOW
-    // -------------------------------------------------------------------
-    public class LoginWindow : Window
-    {
-        public string Username { get; private set; } = "";
-
-        public LoginWindow()
+        // ---------------------------------------------------------
+        // QUIZ BUTTONS
+        // ---------------------------------------------------------
+        private void RealQuiz_Click(object sender, RoutedEventArgs e)
         {
-            this.Title = "Login";
-            this.Width = 300;
-            this.Height = 200;
-            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            Grid grid = new Grid() { Margin = new Thickness(10) };
-            this.Content = grid;
-
-            StackPanel stack = new StackPanel();
-            grid.Children.Add(stack);
-
-            stack.Children.Add(new TextBlock()
-            {
-                Text = "Benutzername:",
-                FontSize = 14,
-                Margin = new Thickness(0, 0, 0, 5)
-            });
-
-            TextBox usernameBox = new TextBox() { Height = 25 };
-            stack.Children.Add(usernameBox);
-
-            Button loginBtn = new Button()
-            {
-                Content = "Login",
-                Height = 30,
-                Margin = new Thickness(0, 10, 0, 0)
-            };
-
-            loginBtn.Click += (s, e) =>
-            {
-                if (!string.IsNullOrWhiteSpace(usernameBox.Text))
-                {
-                    Username = usernameBox.Text.Trim();
-                    this.DialogResult = true;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Bitte einen Benutzernamen eingeben.",
-                        "Fehler", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            };
-
-            stack.Children.Add(loginBtn);
+            LoadQuestions("Real");
+            ShowQuizScreen();
         }
-    }
 
-    // -------------------------------------------------------------------
-    // QUIZ AUSWAHL FENSTER
-    // -------------------------------------------------------------------
-    public class QuizSelectionWindow : Window
-    {
-        private string username;
-
-        public QuizSelectionWindow(string user)
+        private void BarcaQuiz_Click(object sender, RoutedEventArgs e)
         {
-            username = user;
-
-            this.Title = "Quiz Auswahl";
-            this.Width = 400;
-            this.Height = 300;
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            StackPanel stack = new StackPanel()
-            {
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            this.Content = stack;
-
-            stack.Children.Add(new TextBlock()
-            {
-                Text = $"Wähle dein Quiz, {username}",
-                FontSize = 20,
-                Margin = new Thickness(0, 0, 0, 20),
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
-
-            // --- Buttons ---
-            stack.Children.Add(CreateButton("Real Madrid Quiz", "Real"));
-            stack.Children.Add(CreateButton("FC Barcelona Quiz", "Barca"));
-            stack.Children.Add(CreateButton("Champions League Quiz", "CL"));
+            LoadQuestions("Barca");
+            ShowQuizScreen();
         }
 
-        private Button CreateButton(string text, string mode)
+        private void CLQuiz_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = new Button()
-            {
-                Content = text,
-                Width = 200,
-                Height = 40,
-                Margin = new Thickness(0, 10, 0, 0)
-            };
-
-            btn.Click += (s, e) =>
-            {
-                QuizWindow qw = new QuizWindow(mode, username);
-                qw.Show();
-            };
-
-            return btn;
+            LoadQuestions("CL");
+            ShowQuizScreen();
         }
-    }
 
-    // -------------------------------------------------------------------
-    // QUIZ FENSTER
-    // -------------------------------------------------------------------
-    public class QuizWindow : Window
-    {
-        private List<(string Frage, string Antwort)> questions;
-        private int index = 0;
-        private int points = 0;
-        private TextBlock questionBlock;
-        private TextBox answerBox;
-
-        public QuizWindow(string mode, string username)
+        // ---------------------------------------------------------
+        // QUIZ STARTEN
+        // ---------------------------------------------------------
+        private void ShowQuizScreen()
         {
-            this.Title = $"{mode} Quiz — {username}";
-            this.Width = 600;
-            this.Height = 350;
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            QuizSelection.Visibility = Visibility.Collapsed;
+            QuizScreen.Visibility = Visibility.Visible;
 
-            LoadQuestions(mode);
+            index = 0;
+            points = 0;
 
-            Grid grid = new Grid() { Margin = new Thickness(20) };
-            this.Content = grid;
-
-            RowDefinition row1 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) };
-            RowDefinition row2 = new RowDefinition();
-            RowDefinition row3 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) };
-
-            grid.RowDefinitions.Add(row1);
-            grid.RowDefinitions.Add(row2);
-            grid.RowDefinitions.Add(row3);
-
-            questionBlock = new TextBlock()
-            {
-                Text = questions[0].Frage,
-                FontSize = 20,
-                TextWrapping = TextWrapping.Wrap
-            };
-            Grid.SetRow(questionBlock, 0);
-            grid.Children.Add(questionBlock);
-
-            answerBox = new TextBox() { Height = 30, Margin = new Thickness(0, 20, 0, 20) };
-            Grid.SetRow(answerBox, 1);
-            grid.Children.Add(answerBox);
-
-            Button next = new Button()
-            {
-                Content = "Antwort bestätigen",
-                Width = 200,
-                Height = 40
-            };
-            next.Click += NextQuestion;
-            Grid.SetRow(next, 2);
-            grid.Children.Add(next);
+            QuestionText.Text = questions[index].Frage;
+            AnswerBox.Text = "";
         }
 
+        // ---------------------------------------------------------
+        // FRAGEN LADEN
+        // ---------------------------------------------------------
         private void LoadQuestions(string mode)
         {
             if (mode == "Real")
@@ -240,9 +130,12 @@ namespace Fussballquiz
             }
         }
 
-        private void NextQuestion(object sender, RoutedEventArgs e)
+        // ---------------------------------------------------------
+        // NÄCHSTE FRAGE
+        // ---------------------------------------------------------
+        private void NextQuestion_Click(object sender, RoutedEventArgs e)
         {
-            if (answerBox.Text.Trim().ToLower() ==
+            if (AnswerBox.Text.Trim().ToLower() ==
                 questions[index].Antwort.ToLower())
             {
                 points++;
@@ -250,16 +143,20 @@ namespace Fussballquiz
 
             index++;
 
+            // Quiz fertig?
             if (index >= questions.Count)
             {
                 MessageBox.Show($"Quiz beendet!\n\nPunkte: {points}/{questions.Count}",
                     "Ergebnis", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+
+                QuizScreen.Visibility = Visibility.Collapsed;
+                QuizSelection.Visibility = Visibility.Visible;
                 return;
             }
 
-            answerBox.Text = "";
-            questionBlock.Text = questions[index].Frage;
+            // Nächste Frage
+            AnswerBox.Text = "";
+            QuestionText.Text = questions[index].Frage;
         }
     }
 }
