@@ -7,6 +7,7 @@
         Background="#FF0E1410">
 
     <Grid>
+        <!-- Hintergrund mit Verlauf -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                 <GradientStop Color="#FF1F4D1F" Offset="0.0"/>
@@ -14,30 +15,30 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <TextBlock Text="Fussball Quizller"
+        <!-- Titel -->
+        <TextBlock Name="TitleText"
+                   Text="Fussball Quiz &amp; Wett-App"
                    FontSize="28"
                    FontWeight="Bold"
                    Foreground="White"
                    HorizontalAlignment="Center"
-                   Margin="0,40,0,0"
-         />
-        <Button Content="Anmelden&#xD;&#xA;" HorizontalAlignment="Left" Margin="487,295,0,0" VerticalAlignment="Top" Width="67" RenderTransformOrigin="0.5,0.5" Height="25" Click="Button_Click_1">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
-        <Button Content="Ohne Login Starten" HorizontalAlignment="Left" Margin="273,295,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="25" Click="Button_Click_2" />
-        <Image HorizontalAlignment="Left" Height="153" Margin="320,126,0,0" VerticalAlignment="Top" Width="208"/>
+                   Margin="0,40,0,0"/>
 
+        <!-- Buttons im StackPanel -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+            <Button Content="Login" Height="40" Margin="0,0,0,10" Click="LoginButton_Click"/>
+            <Button Content="Ohne Login starten" Height="40" Margin="0,0,0,10" Click="StartButton_Click"/>
+        </StackPanel>
 
-
+        <!-- Fußzeile -->
+        <TextBlock Text="© 2025 Fussballquiz-Team"
+                   Foreground="LightGray"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   Margin="0,0,0,15"/>
     </Grid>
-    
+
 </Window>
     
 
