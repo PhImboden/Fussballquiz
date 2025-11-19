@@ -457,19 +457,27 @@ namespace Fussballquiz
                 var json = File.ReadAllText(highscoreFile);
                 var highs = JsonSerializer.Deserialize<List<HighscoreEntry>>(json) ?? new List<HighscoreEntry>();
 
-                // Sortierung: beste zuerst
-                highs = highs
-                    .OrderByDescending(h => h.Score)
-                    .ThenByDescending(h => h.Date)
+                // Punkte pro Spieler zusammenfassen
+                var summedHighscores = highs
+                    .GroupBy(h => h.Name) // nach Spieler gruppieren
+                    .Select(g => new HighscoreEntry
+                    {
+                        Name = g.Key,
+                        Score = g.Sum(x => x.Score),        // Punkte aufsummieren
+                        Date = g.Max(x => x.Date)          // letztes Spiel-Datum als Referenz
+                    })
+                    .OrderByDescending(h => h.Score)       // nach Punkten sortieren
+                    .ThenByDescending(h => h.Date)        // bei Gleichstand letztes Datum zuerst
                     .ToList();
 
-                HighscoreList.ItemsSource = highs;
+                HighscoreList.ItemsSource = summedHighscores;
             }
             catch
             {
                 HighscoreList.ItemsSource = new List<HighscoreEntry>();
             }
         }
+
 
 
         private void ClearHighscores_Click(object sender, RoutedEventArgs e)
