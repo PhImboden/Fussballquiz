@@ -252,7 +252,7 @@ namespace Fussballquiz
             ("Wer ist der Rekordtorschütze von Real Madrid?", "cristiano ronaldo"),
             ("Wie viele Champions-League-Titel hat Real Madrid?", "15"),
             ("Wie heißt das Stadion von Real Madrid?", "santiago bernabeu"),
-            ("Wer ist der aktuelle Trainer von Real Madrid?", "carlo ancelotti"),
+            ("Wer ist der aktuelle Trainer von Real Madrid?", "xabi alonso"),
             ("In welcher Stadt spielt Real Madrid?", "madrid")
         };
             }
@@ -317,7 +317,7 @@ namespace Fussballquiz
                 questions = new()
         {
             ("Wer gewann die Champions League 2020?", "bayern"),
-            ("Wie viele Teams spielen in der Gruppenphase?", "32"),
+            ("Wie viele Teams spielen in der Gruppenphase?", "36"),
             ("Welcher Klub hat die meisten CL-Titel?", "real madrid"),
             ("In welchem Jahr wurde die Champions League eingeführt?", "1955"),
             ("Wer ist Rekordtorschütze der CL-Geschichte?", "cristiano ronaldo")
