@@ -206,6 +206,40 @@ namespace Fussballquiz
             ShowQuizScreen();
         }
 
+        private void BayernQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClick();
+            LoadQuestions("Bayern");
+            ShowQuizScreen();
+        }
+
+        private void BundesligaQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClick();
+            LoadQuestions("Bindesliga");
+            ShowQuizScreen();
+        }
+
+        private void JuveQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClick();
+            LoadQuestions("Juve");
+            ShowQuizScreen();
+        }
+
+        private void LiverpoolQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClick();
+            LoadQuestions("Liverpool");
+            ShowQuizScreen();
+        }
+        private void PremierQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            PlayClick();
+            LoadQuestions("Premier");
+            ShowQuizScreen();
+        }
+
         // -----------------------
         // Fragen laden
         // -----------------------
@@ -214,31 +248,83 @@ namespace Fussballquiz
             if (mode == "Real")
             {
                 questions = new()
-                {
-                    ("Wer ist der Rekordtorschütze von Real Madrid?", "cristiano ronaldo"),
-                    ("Wie viele Champions-League-Titel hat Real Madrid?", "15"),
-                    ("Wie heißt das Stadion von Real Madrid?", "santiago bernabeu")
-                };
+        {
+            ("Wer ist der Rekordtorschütze von Real Madrid?", "cristiano ronaldo"),
+            ("Wie viele Champions-League-Titel hat Real Madrid?", "15"),
+            ("Wie heißt das Stadion von Real Madrid?", "santiago bernabeu"),
+            ("Wer ist der aktuelle Trainer von Real Madrid?", "carlo ancelotti"),
+            ("In welcher Stadt spielt Real Madrid?", "madrid")
+        };
             }
             else if (mode == "Barca")
             {
                 questions = new()
-                {
-                    ("Wer ist der beste Spieler der in FC Barcelona gespielt hat?", "lionel messi"),
-                    ("Wie heißt das Stadion des FC Barcelona?", "camp nou"),
-                    ("Welche Klubfarben hat Barça?", "blau rot")
-                };
+        {
+            ("Wer ist der beste Spieler, der für FC Barcelona gespielt hat?", "lionel messi"),
+            ("Wie heißt das Stadion des FC Barcelona?", "camp nou"),
+            ("Welche Klubfarben hat Barça?", "blau rot"),
+            ("Wer war Trainer von Barcelona in 2020?", "ronald koeman"),
+            ("In welcher Stadt spielt Barcelona?", "barcelona")
+        };
+            }
+            else if (mode == "Bayern")
+            {
+                questions = new()
+        {
+            ("Wer ist der Rekordtorschütze von Bayern München?", "gerd müller"),
+            ("Wie viele Bundesliga-Titel hat Bayern gewonnen?", "33"),
+            ("Wie heißt das Stadion von Bayern München?", "allianz arena"),
+            ("Wer war Trainer von Bayern 2020?", "hansi flick"),
+            ("In welcher Stadt spielt Bayern München?", "münchen")
+        };
+            }
+            else if (mode == "Liverpool")
+            {
+                questions = new()
+        {
+            ("Wer ist der Rekordtorschütze von Liverpool?", "ian rush"),
+            ("Wie heißt das Stadion von Liverpool?", "anfield"),
+            ("Wie viele Champions-League-Titel hat Liverpool?", "6"),
+            ("Wer war Trainer von Liverpool 2019?", "jurgen klopp"),
+            ("Welche Farben hat Liverpool?", "rot weiß")
+        };
+            }
+            else if (mode == "Juve")
+            {
+                questions = new()
+        {
+            ("Wer ist der Rekordtorschütze von Juventus?", "alessandro del piero"),
+            ("Wie viele Serie-A-Titel hat Juventus gewonnen?", "36"),
+            ("Wie heißt das Stadion von Juventus?", "allianz stadium"),
+            ("Wer war Trainer von Juventus 2020?", "maurizio sarri"),
+            ("Welche Klubfarben hat Juventus?", "schwarz weiß")
+        };
+            }
+            else if (mode == "Premier")
+            {
+                questions = new()
+        {
+            ("Wer ist der Rekordtorschütze von Manchester United?", "wayne rooney"),
+            ("Wie viele Premier-League-Titel hat Manchester United gewonnen?", "20"),
+            ("Wie heißt das Stadion von Arsenal?", "emirates stadium"),
+            ("Wer war Trainer von Liverpool 2020?", "jurgen klopp"),
+            ("Welche Klubfarben hat Chelsea?", "blau weiß")
+        };
             }
             else
             {
+                // Champions League Allgemein
                 questions = new()
-                {
-                    ("Wer gewann die Champions League 2020?", "bayern"),
-                    ("Wie viele Teams spielen in der Gruppenphase?", "36"),
-                    ("Welcher Klub hat die meisten CL Titel?", "real madrid")
-                };
+        {
+            ("Wer gewann die Champions League 2020?", "bayern"),
+            ("Wie viele Teams spielen in der Gruppenphase?", "32"),
+            ("Welcher Klub hat die meisten CL-Titel?", "real madrid"),
+            ("In welchem Jahr wurde die Champions League eingeführt?", "1955"),
+            ("Wer ist Rekordtorschütze der CL-Geschichte?", "cristiano ronaldo")
+        };
             }
         }
+
 
         // -----------------------
         // Quiz starten / anzeigen mit Animation
@@ -253,7 +339,8 @@ namespace Fussballquiz
                 QuizPanel.Visibility = Visibility.Visible;
             });
 
-            WelcomePanel.Visibility = Visibility.Collapsed;
+            // WelcomePanel.Visibility = Visibility.Collapsed; // nur, falls vorhanden
+
             QuizPanel.Visibility = Visibility.Visible;
 
             index = 0;
