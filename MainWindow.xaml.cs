@@ -234,7 +234,7 @@ namespace Fussballquiz
                 questions = new()
                 {
                     ("Wer gewann die Champions League 2020?", "bayern"),
-                    ("Wie viele Teams spielen in der Gruppenphase?", "32"),
+                    ("Wie viele Teams spielen in der Gruppenphase?", "36"),
                     ("Welcher Klub hat die meisten CL Titel?", "real madrid")
                 };
             }
